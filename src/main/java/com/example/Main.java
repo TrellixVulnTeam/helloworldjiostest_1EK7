@@ -17,6 +17,8 @@
 package com.example;
 
 
+import clases.Producto;
+import clases.ProductosRepository;
 import static javax.measure.unit.SI.KILOGRAM;
 import javax.measure.quantity.Mass;
 import org.jscience.physics.model.RelativisticModel;
@@ -38,6 +40,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Map;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Controller
 @SpringBootApplication
@@ -48,10 +60,12 @@ public class Main {
 
   @Autowired
   private DataSource dataSource;
+  private ProductosRepository repository;
 
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
   }
+ 
 
   @RequestMapping("/")
   String index() {
@@ -59,24 +73,38 @@ public class Main {
   }
   
   @RequestMapping("/hello")
-String hello(Map<String, Object> model) {
-    RelativisticModel.select();
-    String energy = System.getenv().get("ENERGY");
-    if (energy == null) {
-       energy = "12 GeV";
-    }
-    Amount<Mass> m = Amount.valueOf(energy).to(KILOGRAM);
-    model.put("science", "E=mc^2: " + energy + " = "  + m.toString());
+    String hello(Map<String, Object> model) {
+        RelativisticModel.select();
+        String energy = System.getenv().get("ENERGY");
+         if (energy == null) {
+           energy = "12 GeV";
+        }
+     Amount<Mass> m = Amount.valueOf(energy).to(KILOGRAM);
+     model.put("science", "E=mc^2: " + energy + " = "  + m.toString());
     return "hello";
 }
+//Codigo Para Prueba 1, que consiste crear una lista generica de nombres online usando la listaGenericaLLS
+    @RequestMapping("/agregar_producto")
+        String agregar_producto() {
+        
 
- @RequestMapping("/prueba1")
-String prueba1(Map<String, Object> model) {
-    RelativisticModel.select();
-//    Amount<Mass> m = Amount.valueOf("12 GeV").to(KILOGRAM);
-//    model.put("science", "E=mc^2: 12 GeV = " + m.toString());
-    return "prueba1";
+    return "agregar_producto";
 }
+    @GetMapping(value = "/agregar")
+            public String agregarProducto(Model model) {
+            model.addAttribute("producto", new Producto());
+    return "productos/agregar_producto";
+}
+   
+       @PostMapping(value = "/agregar")
+    public String guardarProducto(@ModelAttribute Producto producto, RedirectAttributes redirectAttrs) {
+
+        repository.save(producto);
+        redirectAttrs
+                .addFlashAttribute("mensaje", "Agregado correctamente")
+                .addFlashAttribute("clase", "success");
+        return "redirect:/productos/mostrar";
+    }
 
 
   @RequestMapping("/db")
@@ -112,3 +140,47 @@ String prueba1(Map<String, Object> model) {
   }
 
 }
+
+//public void class AccessingDataMongodbApplication implements CommandLineRunner {
+//
+//  @Autowired
+//  private ProductosRepository repository;
+//
+//  public static void main(String[] args) {
+//    SpringApplication.run(AccessingDataMongodbApplication.class, args);
+//  }
+//
+//  @Override
+//  public void run(String... args) throws Exception {
+//
+//    repository.deleteAll();
+//
+//    // save a couple of customers
+//     //Estructura :
+//    //01,20,"Manzana","A23",850
+//    repository.save(new Producto(01,20,"Manzana","A23",850.0));
+//    repository.save(new Producto(02,15,"Pera","B24",650.0));
+//
+//    // fetch all customers
+//    System.out.println("Producto encontrado por findAll():");
+//    System.out.println("-------------------------------");
+//    for (Producto producto : repository.findAll()) {
+//      System.out.println(producto);
+//    }
+//    System.out.println();
+//
+//    // fetch an individual customer
+//    System.out.println("Customer found with findByFirstName('Alice'):");
+//    System.out.println("--------------------------------");
+//    System.out.println(repository.findByName("Manzana"));
+//
+//    System.out.println("Customers found with findByLastName('Smith'):");
+//    System.out.println("--------------------------------");
+//    for (Producto producto : repository.findBycode("B24")) {
+//      System.out.println(producto);
+//    }
+//
+//  }
+//
+//}
+
