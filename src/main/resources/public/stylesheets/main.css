@@ -13,15 +13,23 @@
     margin: 1em auto 2em; }
   .navbar + .jumbotron {
     margin-top: -20px; }
-  .jumbotron .lang-logo {
+/*  .jumbotron .lang-logo {
     display: block;
-    background: #B01302;
-    border-radius: 50%;
-    overflow: hidden;
+    background: #ffffff;*/
+/*    border-radius: 50%;*/
+/*    overflow: hidden;
     width: 100px;
     height: 100px;
     margin: auto;
-    border: 2px solid white; }
-    .jumbotron .lang-logo img {
-      max-width: 100%; }
+    border: 2px solid white; }*/
+/*    .jumbotron .lang-logo img {
+      max-width: 100%; }*/
 
+.sites-logo {
+  margin-left: 10px;
+}
+
+.sites-logo {
+  width: 10px
+  
+}

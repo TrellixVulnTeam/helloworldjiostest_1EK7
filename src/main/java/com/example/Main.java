@@ -16,6 +16,11 @@
 
 package com.example;
 
+
+import static javax.measure.unit.SI.KILOGRAM;
+import javax.measure.quantity.Mass;
+import org.jscience.physics.model.RelativisticModel;
+import org.jscience.physics.amount.Amount;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +57,27 @@ public class Main {
   String index() {
     return "index";
   }
+  
+  @RequestMapping("/hello")
+String hello(Map<String, Object> model) {
+    RelativisticModel.select();
+    String energy = System.getenv().get("ENERGY");
+    if (energy == null) {
+       energy = "12 GeV";
+    }
+    Amount<Mass> m = Amount.valueOf(energy).to(KILOGRAM);
+    model.put("science", "E=mc^2: " + energy + " = "  + m.toString());
+    return "hello";
+}
+
+ @RequestMapping("/prueba1")
+String prueba1(Map<String, Object> model) {
+    RelativisticModel.select();
+//    Amount<Mass> m = Amount.valueOf("12 GeV").to(KILOGRAM);
+//    model.put("science", "E=mc^2: 12 GeV = " + m.toString());
+    return "prueba1";
+}
+
 
   @RequestMapping("/db")
   String db(Map<String, Object> model) {
