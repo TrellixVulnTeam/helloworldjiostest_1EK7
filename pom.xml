@@ -24,7 +24,12 @@
     <webjars-jquery.version>3.3.1-1</webjars-jquery.version>
   </properties>
   
-  
+  <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
   <dependencies>
     <dependency>
@@ -97,6 +102,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
+    <dependency>
+	    <groupId>com.github.slemarchand</groupId>
+	    <artifactId>eirslett-frontend-maven-plugin</artifactId>
+	    <version>1.0</version>
+	</dependency>
    
 
     
