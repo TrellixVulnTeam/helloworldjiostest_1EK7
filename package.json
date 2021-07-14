@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "node-sass": "^6.0.1"
+  },"scripts": {
+    "scss": "node-sass src/main/scss -o target/classes/static/css"
   }
+
 }
