@@ -6,7 +6,7 @@
 package clases;
 
 import java.util.List;
-import clases.Producto;
+import com.example.Producto;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 /**

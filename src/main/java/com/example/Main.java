@@ -17,114 +17,49 @@
 package com.example;
 
 
-import clases.Producto;
-import clases.ProductosRepository;
-import static javax.measure.unit.SI.KILOGRAM;
-import javax.measure.quantity.Mass;
-import org.jscience.physics.model.RelativisticModel;
-import org.jscience.physics.amount.Amount;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Map;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Controller
+
+
+
+@EnableAutoConfiguration
+@ComponentScan
 @SpringBootApplication
 public class Main {
 
   @Value("${spring.datasource.url}")
   private String dbUrl;
 
-  @Autowired
-  private DataSource dataSource;
-  private ProductosRepository repository;
 
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
     
+        ConnectionString connectionString = new ConnectionString("mongodb+srv://coteAdmin_:<LFsXApgZG5IjUThy>@cluster0.wamjx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        MongoClientSettings settings = MongoClientSettings.builder()
+        .applyConnectionString(connectionString)
+        .build();
+        MongoClient mongoClient = MongoClients.create(settings);
+        MongoDatabase database = mongoClient.getDatabase("test");
+
+    
   }
  
-
-  @RequestMapping("/")
-  String index() {
-    return "index";
-  }
-  
-  @RequestMapping("/hello")
-    String hello(Map<String, Object> model) {
-        RelativisticModel.select();
-        String energy = System.getenv().get("ENERGY");
-         if (energy == null) {
-           energy = "12 GeV";
-        }
-     Amount<Mass> m = Amount.valueOf(energy).to(KILOGRAM);
-     model.put("science", "E=mc^2: " + energy + " = "  + m.toString());
-    return "hello";
-}
-//Codigo Para Prueba 1, que consiste crear una lista generica de nombres online usando la listaGenericaLLS
-    @RequestMapping("/agregar_producto")
-        String agregar_producto() {
-        
-
-    return "agregar_producto";
-}
-    @GetMapping(value = "/agregar")
-            public String agregarProducto(Model model) {
-            model.addAttribute("producto", new Producto());
-    return "productos/agregar_producto";
-}
-   
-       @PostMapping(value = "/agregar")
-    public String guardarProducto(@ModelAttribute Producto producto, RedirectAttributes redirectAttrs) {
-
-        repository.save(producto);
-        redirectAttrs
-                .addFlashAttribute("mensaje", "Agregado correctamente")
-                .addFlashAttribute("clase", "success");
-        return "redirect:/productos/mostrar";
-    }
-
-
-  @RequestMapping("/db")
-  String db(Map<String, Object> model) {
-    try (Connection connection = dataSource.getConnection()) {
-      Statement stmt = connection.createStatement();
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-      ResultSet rs = stmt.executeQuery("SELECT tick FROM ticks");
-
-      ArrayList<String> output = new ArrayList<String>();
-      while (rs.next()) {
-        output.add("Read from DB: " + rs.getTimestamp("tick"));
-      }
-
-      model.put("records", output);
-      return "db";
-    } catch (Exception e) {
-      model.put("message", e.getMessage());
-      return "error";
-    }
-  }
-
   @Bean
   public DataSource dataSource() throws SQLException {
     if (dbUrl == null || dbUrl.isEmpty()) {
