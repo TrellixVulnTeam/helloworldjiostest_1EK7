@@ -103,6 +103,13 @@
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
     <dependency>
+        
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            
+      <type>jar</type>
+    </dependency>
+    <dependency>
 	    <groupId>com.github.slemarchand</groupId>
 	    <artifactId>eirslett-frontend-maven-plugin</artifactId>
 	    <version>1.0</version>

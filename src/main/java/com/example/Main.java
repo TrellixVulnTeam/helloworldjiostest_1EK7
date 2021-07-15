@@ -34,28 +34,32 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 
 
 
 
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @ComponentScan
+
 @SpringBootApplication
+@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 public class Main {
 
   @Value("${spring.datasource.url}")
   private String dbUrl;
 
-
-  public static void main(String[] args) throws Exception {
-    SpringApplication.run(Main.class, args);
-    
-        ConnectionString connectionString = new ConnectionString("mongodb+srv://coteAdmin_:<LFsXApgZG5IjUThy>@cluster0.wamjx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+  ConnectionString connectionString = new ConnectionString("mongodb+srv://coteAdmin_:<LFsXApgZG5IjUThy>@cluster0.wamjx.mongodb.net/productos_supermercado?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
         .applyConnectionString(connectionString)
         .build();
         MongoClient mongoClient = MongoClients.create(settings);
-        MongoDatabase database = mongoClient.getDatabase("test");
+        MongoDatabase database = mongoClient.getDatabase("productos_supermercado");
+
+  public static void main(String[] args) throws Exception {
+    SpringApplication.run(Main.class, args);
+    
+        
 
     
   }
