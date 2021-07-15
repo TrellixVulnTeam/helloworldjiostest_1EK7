@@ -171,8 +171,9 @@
 
         <configuration>
              <nodeVersion>v5.1.1</nodeVersion>
+                      <npmVersion>3.3.12</npmVersion>
                       <!-- optional: where to download node and npm from. Defaults to https://nodejs.org/dist/ -->
-                      <downloadRoot>https://nodejs.org/dist/v5.1.1/node-v5.1.1-linux-x64.tar.gz</downloadRoot>
+                      <downloadRoot>https://nodejs.org/dist/v5.1.1/node-v5.1.1.tar.gz</downloadRoot>
             <installDirectory>target</installDirectory>
         </configuration>
           <executions>
